@@ -21,19 +21,27 @@ const ListStyle = styled.ul`
   padding: 0;
   li {
     display: flex;
+    flex-wrap: wrap;
     justify-content: flex-start;
-    align-items: flex-end;
-    padding: 1em;
-    padding-top: 2em;
-    border-bottom: 1px solid #ccc;
+    align-items: center;
+    padding: 2em 0 1em 0;
+    img {
+      width: 200px;
+    }
+    .controls {
+      margin: 10px;
+    }
     p {
-      margin: 14px;
-      margin-bottom: 0;
+      margin: 6px 0;
+      text-align: center;
+    }
+    @media (max-width: 600px) {
+      flex-direction: column;
     }
   }
 `;
 const Button = styled.button`
-  background: ${props => props.icon ? 'transparent' : 'white'};
+  background: white;
   color: var(--color-accent);
   border-radius: 4px;
   padding: 8px ${props => props.icon ? '8px' : '12px'};
@@ -45,6 +53,12 @@ const Button = styled.button`
     margin: 20px auto;
     display: block;  
   ` : ''}
+  & + button {
+    margin-left: 12px;
+  }
+  &:hover {
+    background: #f7f7f7;
+  }
 `;
 
 class SearchResults extends Component {
@@ -98,20 +112,18 @@ class SearchResults extends Component {
           {results.map(result => (
             <li key={result.id}>
               <img src={result.imageUrl} alt="thumbnail" />
-              <div>
-                <div>
-                  <Button icon="true">
-                    <i className="material-icons">play_arrow</i>
-                  </Button>
-                  <Button icon="true">
-                    <i className="material-icons">playlist_add</i>
-                  </Button>
-                  <Button icon="true">
-                    <i className="material-icons">cloud_download</i>
-                  </Button>
-                </div>
-                <p>{result.title}</p>
+              <div className="controls">
+                <Button icon>
+                  <i className="material-icons">play_arrow</i>
+                </Button>
+                <Button icon>
+                  <i className="material-icons">playlist_add</i>
+                </Button>
+                <Button icon>
+                  <i className="material-icons">cloud_download</i>
+                </Button>
               </div>
+              <p>{result.title}</p>
             </li>
           ))}
         </ListStyle>

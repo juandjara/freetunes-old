@@ -46,11 +46,11 @@ const SearchStyle = styled.div`
     border-radius: 4px;
     padding-left: 22px;
     font-size: 12px;
-    width: 180px;
+    width: 120px;
     transition: all 0.3s;
     outline: none;
     &:focus {
-      width: 260px;
+      width: 165px;
       border-color: var(--color-accent);
     }
   }
@@ -81,6 +81,8 @@ const ResultsStyle = styled.ul`
   }
 `;
 
+const enterKeycode = 13;
+
 const googleAutoSuggestURL = '//suggestqueries.google.com/complete/search?client=youtube&ds=yt&q=';
 
 class Nav extends Component {
@@ -90,12 +92,20 @@ class Nav extends Component {
     open: false
   }
 
-  onKeyUp = debounce((query) => {
+  debounceKeyup = debounce((query) => {
     this.fetchAutoSuggest(query).then(results => {
       console.log('results: ', results);
       this.setState({searchResults: results, loading: false})
     });
   }, 300);
+
+  onKeyUp(ev) {
+    const query = ev.target.value;
+    if (ev.keyCode === enterKeycode) {
+      this.onSelectResult(query);
+    }
+    this.debounceKeyup(query);
+  }
 
   fetchAutoSuggest(query) {
     const url = googleAutoSuggestURL + query;
@@ -142,7 +152,7 @@ class Nav extends Component {
             onFocus={() => this.onFocus()}
             onBlur={() => this.onBlur()}
             onChange={ev => this.setState({query: ev.target.value})}
-            onKeyUp={ev => this.onKeyUp(ev.target.value)} />
+            onKeyUp={ev => this.onKeyUp(ev)} />
         </SearchStyle>
         <ResultsStyle open={this.state.open}>
           {this.state.searchResults.map((result, index) => (
