@@ -1,22 +1,22 @@
 import React, { createContext, Component } from 'react';
 
 const Context = createContext({
-  getQueue: () => [],
-  setQueue: () => {},
-  getAutoplay: () => false,
-  setAutoplay: () => {}
+  get: key => {
+    return this.state[key];
+  },
+  set: (key, value) => {
+    this.setState({ [key]: value });
+  }
 })
 
 export const ContextConsumer = Context.Consumer;
 export class ContextProvider extends Component {
   state = {
-    autoplay: false,
-    queue: [],
-    setQueue: queue => {
-      this.setState({queue})
+    get: key => {
+      return this.state[key];
     },
-    setAutoplay: autoplay => {
-      this.setState({autoplay})
+    set: (key, value) => {
+      this.setState({ [key]: value });
     }
   }
   render() { 

@@ -93,7 +93,7 @@ class SearchResults extends Component {
     .then(data => {
       const results = data.results.map(parseSong).filter(s => s.id);
       if (this.props.context) {
-        this.props.context.setQueue(results);
+        this.props.context.set('queue', results);
       }
       this.setState({
         results,
