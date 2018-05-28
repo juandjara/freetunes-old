@@ -1,6 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import qs from 'qs';
 import styled from 'styled-components';
+import { withContext } from './Context';
 
 const api = 'https://ftunes-api.fuken.xyz';
 
@@ -29,7 +30,7 @@ const ListStyle = styled.ul`
       width: 200px;
     }
     .controls {
-      margin: 10px;
+      margin: 12px;
     }
     p {
       margin: 6px 0;
@@ -90,9 +91,13 @@ class SearchResults extends Component {
     fetch(`${api}/search?q=${query}&nextPageToken=${nextPageToken}`)
     .then(res => res.json())
     .then(data => {
+      const results = data.results.map(parseSong).filter(s => s.id);
+      if (this.props.context) {
+        this.props.context.setQueue(results);
+      }
       this.setState({
+        results,
         loading: false,
-        results: data.results.map(parseSong).filter(s => s.id),
         nextPageToken: data.nextPageToken
       });
     })
@@ -113,13 +118,13 @@ class SearchResults extends Component {
             <li key={result.id}>
               <img src={result.imageUrl} alt="thumbnail" />
               <div className="controls">
-                <Button icon>
+                <Button icon title="Reproducir">
                   <i className="material-icons">play_arrow</i>
                 </Button>
-                <Button icon>
+                <Button icon title="Añadir a la playlist">
                   <i className="material-icons">playlist_add</i>
                 </Button>
-                <Button icon>
+                <Button icon title="Descargar">
                   <i className="material-icons">cloud_download</i>
                 </Button>
               </div>
@@ -136,5 +141,6 @@ class SearchResults extends Component {
     )
   }
 }
- 
-export default SearchResults;
+
+export default withContext(SearchResults);
+

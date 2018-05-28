@@ -28,4 +28,13 @@ export class ContextProvider extends Component {
   }
 }
 
-export default { ContextConsumer, ContextProvider };
+export function withContext(WrappedComponent) {
+  const ContextWrapper = (props) => (
+    <ContextConsumer>
+      {context => <WrappedComponent {...props} context={context} />}
+    </ContextConsumer>
+  );
+  return ContextWrapper;
+}
+
+export default { withContext, ContextConsumer, ContextProvider };
