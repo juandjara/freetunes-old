@@ -50,7 +50,7 @@ const SearchStyle = styled.div`
     transition: all 0.3s;
     outline: none;
     &:focus {
-      width: 165px;
+      width: 160px;
       border-color: var(--color-accent);
     }
   }

@@ -45,14 +45,15 @@ const Button = styled.button`
   background: white;
   color: var(--color-accent);
   border-radius: 4px;
-  padding: 8px ${props => props.icon ? '8px' : '12px'};
+  padding: 8px;
   border: none;
   font-weight: 500;
   font-size: 16px;
   cursor: pointer;
   ${props => props.centered ? `
     margin: 20px auto;
-    display: block;  
+    padding: 8px 12px;
+    display: block;
   ` : ''}
   & + button {
     margin-left: 12px;
@@ -92,9 +93,7 @@ class SearchResults extends Component {
     .then(res => res.json())
     .then(data => {
       const results = data.results.map(parseSong).filter(s => s.id);
-      if (this.props.context) {
-        this.props.context.set('queue', results);
-      }
+      this.props.context.set({queue: results});
       this.setState({
         results,
         loading: false,
@@ -102,6 +101,11 @@ class SearchResults extends Component {
       });
     })
   }
+
+  play(result) {
+    this.props.context.set({currentSong: result})
+  }
+
   render() {
     const {query, loading, results, nextPageToken} = this.state;
     if (results.length === 0 && !loading) {
@@ -118,13 +122,13 @@ class SearchResults extends Component {
             <li key={result.id}>
               <img src={result.imageUrl} alt="thumbnail" />
               <div className="controls">
-                <Button icon title="Reproducir">
+                <Button onClick={() => this.play(result)} title="Reproducir">
                   <i className="material-icons">play_arrow</i>
                 </Button>
-                <Button icon title="Añadir a la playlist">
+                <Button title="Añadir a la playlist">
                   <i className="material-icons">playlist_add</i>
                 </Button>
-                <Button icon title="Descargar">
+                <Button title="Descargar">
                   <i className="material-icons">cloud_download</i>
                 </Button>
               </div>

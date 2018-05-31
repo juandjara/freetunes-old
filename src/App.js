@@ -5,6 +5,7 @@ import Nav from './Nav';
 import Playlist from './Playlist';
 import SearchResults from './SearchResults';
 import { ContextProvider } from './Context';
+import Player from './Player';
 
 class App extends Component {
   render() {
@@ -18,6 +19,7 @@ class App extends Component {
               <Route exact path="/" component={Playlist} />
               <Route path="/search" component={SearchResults} />
             </div>
+            <Player></Player>
           </Fragment>
         </BrowserRouter>
       </ContextProvider>
