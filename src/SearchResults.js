@@ -2,6 +2,7 @@ import React, { Component, Fragment } from 'react';
 import qs from 'qs';
 import styled from 'styled-components';
 import { withContext } from './Context';
+import { Link } from 'react-router-dom';
 
 const api = 'https://ftunes-api.fuken.xyz';
 
@@ -50,6 +51,7 @@ const Button = styled.button`
   font-weight: 500;
   font-size: 16px;
   cursor: pointer;
+  display: inline-block;
   ${props => props.centered ? `
     margin: 20px auto;
     padding: 8px 12px;
@@ -62,6 +64,7 @@ const Button = styled.button`
     background: #f7f7f7;
   }
 `;
+const PlayLink = Button.withComponent(Link);
 
 class SearchResults extends Component {
   state = {
@@ -102,10 +105,6 @@ class SearchResults extends Component {
     })
   }
 
-  play(result) {
-    this.props.context.set({currentSong: result})
-  }
-
   render() {
     const {query, loading, results, nextPageToken} = this.state;
     if (results.length === 0 && !loading) {
@@ -122,9 +121,11 @@ class SearchResults extends Component {
             <li key={result.id}>
               <img src={result.imageUrl} alt="thumbnail" />
               <div className="controls">
-                <Button onClick={() => this.play(result)} title="Reproducir">
+                <PlayLink
+                  to={`/song/${result.id}`} 
+                  title="Reproducir">
                   <i className="material-icons">play_arrow</i>
-                </Button>
+                </PlayLink>
                 <Button title="Añadir a la playlist">
                   <i className="material-icons">playlist_add</i>
                 </Button>

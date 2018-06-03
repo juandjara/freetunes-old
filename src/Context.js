@@ -1,7 +1,20 @@
 import React, { createContext, Component } from 'react';
 
+const api = 'https://ftunes-api.fuken.xyz';
+function parseSong(song) {
+  return {
+    id: song.id,
+    title: song.data.title,
+    streamUrl: `${api}/stream/${song.id}`,
+    downloadUrl: `${api}/dl/${song.id}?title=${song.data.title}`,
+    imageUrl: song.data.thumbnails.default.url
+  }
+}
+
+
 const Context = createContext({
   queue: [],
+  songs: {},
   autoplay: false,
   currentSongIndex: null,
   set: () => {}
@@ -10,11 +23,37 @@ const Context = createContext({
 export const ContextConsumer = Context.Consumer;
 export class ContextProvider extends Component {
   state = {
+    songs: {},
     queue: [],
     autoplay: false,
     currentSongIndex: null,
     set: (...args) => {
       this.setState(...args);
+    },
+    setQueue: (queue) => {
+      const order = queue.map(s => s.id);
+      const entities = queue.reduce((prev, next) =>{
+        prev[next.id] = parseSong(next);
+        return prev;
+      }, {})
+      this.setState(state => ({
+        queue: order,
+        songs: {...state.songs, entities}
+      }));
+    },
+    cacheSong: (song) => {
+      this.setState(state => ({
+        songs: {
+          ...state.songs,
+          [song.id]: {
+            id: song.id,
+            title: song.title,
+            streamUrl: `${api}/stream/${song.id}`,
+            downloadUrl: `${api}/dl/${song.id}?title=${song.title}`,
+            imageUrl: song.thumbnails.medium.url
+          }
+        }
+      }))
     }
   }
   render() { 
