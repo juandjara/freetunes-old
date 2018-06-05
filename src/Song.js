@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import { withContext } from './Context';
 import styled from 'styled-components';
+import config from './config';
 
 const SongStyle = styled.div`
   img {
@@ -32,15 +33,13 @@ const Button = styled.button`
   }
 `;
 
-const api = 'https://ftunes-api.fuken.xyz';
-
 class Song extends Component {
   componentDidMount() {
     const id = this.props.match.params.id;
     const song = this.props.context.songs[id];
 
     if (!song) {
-      fetch(`${api}/song/${id}`)
+      fetch(`${config.api}/song/${id}`)
       .then(res => res.json())
       .then(json => {
         this.props.context.cacheSong(json);

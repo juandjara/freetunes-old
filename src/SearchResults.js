@@ -3,15 +3,14 @@ import qs from 'qs';
 import styled from 'styled-components';
 import { withContext } from './Context';
 import { Link } from 'react-router-dom';
-
-const api = 'https://ftunes-api.fuken.xyz';
+import config from './config';
 
 function parseSong(song) {
   return {
     id: song.id,
     title: song.data.title,
-    streamUrl: `${api}/stream/${song.id}`,
-    downloadUrl: `${api}/dl/${song.id}?title=${song.data.title}`,
+    streamUrl: `${config.api}/stream/${song.id}`,
+    downloadUrl: `${config.api}/dl/${song.id}?title=${encodeURIComponent(song.data.title)}`,
     imageUrl: song.data.thumbnails.default.url
   }
 }
@@ -52,19 +51,18 @@ const Button = styled.button`
   font-size: 16px;
   cursor: pointer;
   display: inline-block;
+  margin: 0 6px;
   ${props => props.centered ? `
     margin: 20px auto;
     padding: 8px 12px;
     display: block;
   ` : ''}
-  & + button {
-    margin-left: 12px;
-  }
   &:hover {
     background: #f7f7f7;
   }
 `;
 const PlayLink = Button.withComponent(Link);
+const DownloadLink = Button.withComponent('a');
 
 class SearchResults extends Component {
   state = {
@@ -92,7 +90,7 @@ class SearchResults extends Component {
   }
   fetchSearchResults(query, nextPageToken = '') {
     this.setState({query, loading: true});
-    fetch(`${api}/search?q=${query}&nextPageToken=${nextPageToken}`)
+    fetch(`${config.api}/search?q=${query}&nextPageToken=${nextPageToken}`)
     .then(res => res.json())
     .then(data => {
       const results = data.results.map(parseSong).filter(s => s.id);
@@ -129,9 +127,12 @@ class SearchResults extends Component {
                 <Button title="Añadir a la playlist">
                   <i className="material-icons">playlist_add</i>
                 </Button>
-                <Button title="Descargar">
+                <DownloadLink
+                  download
+                  href={result.downloadUrl}
+                  title="Descargar">
                   <i className="material-icons">cloud_download</i>
-                </Button>
+                </DownloadLink>
               </div>
               <p>{result.title}</p>
             </li>

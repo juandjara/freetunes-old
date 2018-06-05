@@ -1,12 +1,12 @@
 import React, { createContext, Component } from 'react';
+import config from './config';
 
-const api = 'https://ftunes-api.fuken.xyz';
 function parseSong(song) {
   return {
     id: song.id,
     title: song.data.title,
-    streamUrl: `${api}/stream/${song.id}`,
-    downloadUrl: `${api}/dl/${song.id}?title=${song.data.title}`,
+    streamUrl: `${config.api}/stream/${song.id}`,
+    downloadUrl: `${config.api}/dl/${song.id}?title=${encodeURIComponent(song.data.title)}`,
     imageUrl: song.data.thumbnails.default.url
   }
 }
