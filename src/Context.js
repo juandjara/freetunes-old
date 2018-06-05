@@ -1,12 +1,12 @@
 import React, { createContext, Component } from 'react';
-import config from './config';
+import {api} from './config';
 
 function parseSong(song) {
   return {
     id: song.id,
     title: song.data.title,
-    streamUrl: `${config.api}/stream/${song.id}`,
-    downloadUrl: `${config.api}/dl/${song.id}?title=${encodeURIComponent(song.data.title)}`,
+    streamUrl: `${api}/stream/${song.id}`,
+    downloadUrl: `${api}/dl/${song.id}?title=${encodeURIComponent(song.data.title)}`,
     imageUrl: song.data.thumbnails.default.url
   }
 }
@@ -48,8 +48,8 @@ export class ContextProvider extends Component {
           [song.id]: {
             id: song.id,
             title: song.title,
-            streamUrl: `${api}/stream/${song.id}`,
-            downloadUrl: `${api}/dl/${song.id}?title=${song.title}`,
+            streamUrl: `${song.api}/stream/${song.id}`,
+            downloadUrl: `${song.api}/dl/${song.id}?title=${song.title}`,
             imageUrl: song.thumbnails.medium.url
           }
         }

@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import { withContext } from './Context';
 import styled from 'styled-components';
-import config from './config';
+import {api} from './config';
 
 const SongStyle = styled.div`
   img {
@@ -39,7 +39,7 @@ class Song extends Component {
     const song = this.props.context.songs[id];
 
     if (!song) {
-      fetch(`${config.api}/song/${id}`)
+      fetch(`${api}/song/${id}`)
       .then(res => res.json())
       .then(json => {
         this.props.context.cacheSong(json);

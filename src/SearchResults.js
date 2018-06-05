@@ -3,14 +3,14 @@ import qs from 'qs';
 import styled from 'styled-components';
 import { withContext } from './Context';
 import { Link } from 'react-router-dom';
-import config from './config';
+import {api} from './config';
 
 function parseSong(song) {
   return {
     id: song.id,
     title: song.data.title,
-    streamUrl: `${config.api}/stream/${song.id}`,
-    downloadUrl: `${config.api}/dl/${song.id}?title=${encodeURIComponent(song.data.title)}`,
+    streamUrl: `${api}/stream/${song.id}`,
+    downloadUrl: `${api}/dl/${song.id}?title=${encodeURIComponent(song.data.title)}`,
     imageUrl: song.data.thumbnails.default.url
   }
 }
@@ -90,7 +90,7 @@ class SearchResults extends Component {
   }
   fetchSearchResults(query, nextPageToken = '') {
     this.setState({query, loading: true});
-    fetch(`${config.api}/search?q=${query}&nextPageToken=${nextPageToken}`)
+    fetch(`${api}/search?q=${query}&nextPageToken=${nextPageToken}`)
     .then(res => res.json())
     .then(data => {
       const results = data.results.map(parseSong).filter(s => s.id);
@@ -128,7 +128,7 @@ class SearchResults extends Component {
                   <i className="material-icons">playlist_add</i>
                 </Button>
                 <DownloadLink
-                  download
+                  download={`${result.title}.mp3`}
                   href={result.downloadUrl}
                   title="Descargar">
                   <i className="material-icons">cloud_download</i>
