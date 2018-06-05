@@ -4,9 +4,10 @@ import styled from 'styled-components';
 
 const SongStyle = styled.div`
   img {
-    margin: 0 auto;
+    margin: 1em auto;
     display: block;
-    max-width: 90vw;
+    max-width: 100%;
+    box-sizing: border-box;
   }
   p {
     text-align: center;
@@ -16,15 +17,18 @@ const Button = styled.button`
   background: none;
   color: #666;
   border-radius: 4px;
-  padding: 8px;
+  margin: 0 auto;
   display: block;
   cursor: pointer;
   border: none;
+  font-size: 14px;
   .material-icons {
     margin-right: 6px;
+    font-size: 20px;
+    vertical-align: middle;
   }
   &:hover {
-    color: #ccc;
+    opacity: 0.75;
   }
 `;
 
@@ -33,11 +37,17 @@ const api = 'https://ftunes-api.fuken.xyz';
 class Song extends Component {
   componentDidMount() {
     const id = this.props.match.params.id;
-    fetch(`${api}/song/${id}`)
-    .then(res => res.json())
-    .then(json => {
-      this.props.context.cacheSong(json);
-    })
+    const song = this.props.context.songs[id];
+
+    if (!song) {
+      fetch(`${api}/song/${id}`)
+      .then(res => res.json())
+      .then(json => {
+        this.props.context.cacheSong(json);
+      })
+    }
+
+    this.props.context.set({currentSongIndex: id});
   }
   render() {
     const id = this.props.match.params.id;
