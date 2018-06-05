@@ -13,11 +13,6 @@ const PlayerStyle = styled.div`
   width: 100%;
   background: var(--color-accent);
   padding: 8px 0;
-  display: flex;
-  justify-content: space-between;
-  .controls {
-    flex-grow: 1;
-  }
 `;
 const Button = styled.button`
   color: white;
@@ -35,8 +30,30 @@ const Button = styled.button`
     color: var(--color-accent);
     border-radius: 50%;
   }
+  ${props => props.loading && `
+    position: relative;  
+    &:before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+
+      display: block;
+      border-radius: 50%;
+      width: 100%;
+      height: 100%;
+      box-sizing: border-box;
+      border: 4px solid transparent;
+      border-left-color: #e0e0e0;
+      animation: spin 1s linear infinite;
+    }
+  `}
   &:hover {
     opacity: 0.75;
+  }
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
   }
 `;
 const PlayControl = styled.div`
@@ -59,62 +76,116 @@ const TimeControl = styled.div`
     flex: 1 1 auto;
   }
 `;
-const Cover = styled.div`
-  img {
-    height: 60px;
-  }
-`;
 
 class Player extends Component {
   state = {
     paused: false,
     loading: false,
-    position: 0,
     sound: null,
   }
   componentDidMount () {
     soundManager.setup({debugMode: false});
   }
   togglePlayPause() {
-
+    this.setState(state => ({paused: !state.paused}))
   }
+
+  getPercentPlayed() {
+    if (!this.state.sound) {
+      return 0;
+    }
+    const total   = this.state.sound.duration;
+    const current = this.state.sound.position;
+    return current / total;
+  }
+
+  onPlaying(sound) {
+    this.setState({
+      sound,
+      loading: false,
+      paused: false
+    });
+  }
+
+  formatTime(ms) {
+    if(!ms && ms !== 0) {
+      return '--:--';
+    }
+    let seconds = Math.floor(ms / 1000);
+    let minutes = Math.floor(seconds / 60);
+
+    seconds = seconds - (minutes * 60);
+    if (seconds < 10) {
+      seconds = `0${seconds}`;
+    }
+    if (minutes < 10) {
+      minutes = `0${minutes}`;
+    }
+    return `${minutes}:${seconds}`;
+  }
+
+  onFinished() {
+    this.setState({
+      sound: null
+    })
+  }
+
+  onSlide(value) {
+    if (!this.state.sound) {
+      return;
+    }
+    this.setState(state => ({
+      sound: {
+        ...state.sound, 
+        position: value * state.sound.duration
+      }
+    }))
+  }
+
   render() {
-    // const {queue} = this.props.context;
-    // const song = queue[0] || {};
-    const song = {};
+    const {songs, currentSongIndex} = this.props.context;
+    const {loading, paused, sound} = this.state;
+    const icon = !sound || paused ? 'play_arrow' : 'pause'
+    const startTime = this.formatTime(sound && sound.position);
+    const endTime = this.formatTime(sound && sound.duration);
+    const song = songs[currentSongIndex] || {};
+    const playStatus = this.state.paused ? 
+      Sound.status.PAUSED : Sound.status.PLAYING;
+
     return (
       <PlayerStyle>
         <Sound 
           url={song.streamUrl || ""}
-          playStatus={Sound.status.PLAYING} />
-        <Cover>
-          <img src={song.imageUrl} alt="" />
-          <p>{song.title}</p>
-        </Cover>
-        <div className="controls">
-          <PlayControl>
-            <Button>
-              <i className="material-icons">fast_rewind</i>
-            </Button>
-            <Button className="playpause" onClick={() => this.togglePlayPause()}>
-              <i className="material-icons">
-                {song.paused ? 'play_arrow' : 'pause'}
-              </i>
-            </Button>
-            <Button>
-              <i className="material-icons">fast_forward</i>
-            </Button>
-          </PlayControl>
-          <TimeControl>
-            <p>00:00</p>
-            <Slider
-              innerRef={node => {this.slideNode = node}}
-              min={0}
-              max={1}
-              step={0.01} />
-            <p>00:00</p>          
-          </TimeControl>
-        </div>
+          playStatus={playStatus}
+          position={sound ? sound.position : 0}
+          onLoading={() => this.setState({loading: true})}
+          onPlaying={sound => this.onPlaying(sound)}
+          onFinishedPlayed={() => this.onFinished()} />
+        <PlayControl>
+          <Button>
+            <i className="material-icons">fast_rewind</i>
+          </Button>
+          <Button 
+            loading={loading} 
+            className="playpause" 
+            onClick={() => this.togglePlayPause()}>
+            <i className="material-icons">{icon}</i>
+          </Button>
+          <Button>
+            <i className="material-icons">fast_forward</i>
+          </Button>
+        </PlayControl>
+        <TimeControl>
+          <p>{startTime}</p>
+          <Slider
+            onChange={ev => this.onSlide(ev.target.value)}
+            value={this.getPercentPlayed()}
+            innerRef={node => {this.slideNode = node}}
+            min={0}
+            max={1}
+            step={0.01} />
+          <p>{endTime}</p>          
+        </TimeControl>
       </PlayerStyle>
     );
   }

@@ -5,7 +5,8 @@ function track(isFill) {
   return `
     box-sizing: border-box;
     border: none;
-    width: var(--track-w);
+    width: 100%;
+    min-width: var(--track-w);
     height: var(--track-h);
     background: var(--track-c);
     ${fill && `
@@ -54,6 +55,7 @@ const SliderStyle = styled.input`
     margin: 0;
     padding: 0;
     width: var(--track-w);
+    min-width: var(--track-w);
     height: var(--thumb-d);
     background: transparent;
     font: 1em/1 arial, sans-serif;

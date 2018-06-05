@@ -126,6 +126,7 @@ class Nav extends Component {
 
   onFocus() {
     this.setState({open: true});
+    document.querySelector('.wrapper').scrollIntoView();
   }
 
   onBlur() {
