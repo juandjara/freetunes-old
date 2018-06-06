@@ -1,19 +1,9 @@
 import React, { Component, Fragment } from 'react';
 import qs from 'qs';
 import styled from 'styled-components';
-import { withContext } from './Context';
+import { withContext, parseSong } from './Context';
 import { Link } from 'react-router-dom';
-import {api} from './config';
-
-function parseSong(song) {
-  return {
-    id: song.id,
-    title: song.data.title,
-    streamUrl: `${api}/stream/${song.id}`,
-    downloadUrl: `${api}/dl/${song.id}?title=${encodeURIComponent(song.data.title)}`,
-    imageUrl: song.data.thumbnails.default.url
-  }
-}
+import { api } from './config';
 
 const ListStyle = styled.ul`
   opacity: ${props => props.loading ? 0.5 : 1};
@@ -93,7 +83,9 @@ class SearchResults extends Component {
     fetch(`${api}/search?q=${query}&nextPageToken=${nextPageToken}`)
     .then(res => res.json())
     .then(data => {
-      const results = data.results.map(parseSong).filter(s => s.id);
+      const prevResults = nextPageToken ? this.state.results : [];
+      const newResults = data.results.map(parseSong);
+      const results = prevResults.concat(newResults);
       this.props.context.set({queue: results});
       this.setState({
         results,

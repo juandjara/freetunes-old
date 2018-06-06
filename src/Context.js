@@ -1,16 +1,15 @@
 import React, { createContext, Component } from 'react';
 import {api} from './config';
 
-function parseSong(song) {
+export function parseSong(song) {
   return {
     id: song.id,
-    title: song.data.title,
+    title: song.title,
     streamUrl: `${api}/stream/${song.id}`,
-    downloadUrl: `${api}/dl/${song.id}?title=${encodeURIComponent(song.data.title)}`,
-    imageUrl: song.data.thumbnails.default.url
+    downloadUrl: `${api}/dl/${song.id}?title=${encodeURIComponent(song.title)}`,
+    imageUrl: song.thumbnails.medium.url
   }
 }
-
 
 const Context = createContext({
   queue: [],
@@ -45,13 +44,7 @@ export class ContextProvider extends Component {
       this.setState(state => ({
         songs: {
           ...state.songs,
-          [song.id]: {
-            id: song.id,
-            title: song.title,
-            streamUrl: `${song.api}/stream/${song.id}`,
-            downloadUrl: `${song.api}/dl/${song.id}?title=${song.title}`,
-            imageUrl: song.thumbnails.medium.url
-          }
+          [song.id]: parseSong(song)
         }
       }))
     }
