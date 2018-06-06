@@ -32,12 +32,11 @@ const ListStyle = styled.ul`
   }
 `;
 const Button = styled.button`
-  background: white;
+  background: ${props => props.playing ? '#f7f7f7' : 'white'};
   color: var(--color-accent);
   border-radius: 4px;
   padding: 8px;
   border: none;
-  font-weight: 500;
   font-size: 16px;
   cursor: pointer;
   display: inline-block;
@@ -112,6 +111,7 @@ class SearchResults extends Component {
               <img src={result.imageUrl} alt="thumbnail" />
               <div className="controls">
                 <PlayLink
+                  playing={result.id === this.props.context.currentSongIndex}
                   to={`/song/${result.id}`} 
                   title="Reproducir">
                   <i className="material-icons">play_arrow</i>
