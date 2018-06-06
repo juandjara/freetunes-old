@@ -2,7 +2,6 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
 import { withContext } from './Context';
-import { withRouter } from 'react-router-dom';
 import Sound from 'react-sound';
 import Slider from './Slider';
 
@@ -191,4 +190,4 @@ class Player extends Component {
   }
 }
 
-export default withRouter(withContext(Player));
+export default withContext(Player);
