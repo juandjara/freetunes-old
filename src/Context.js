@@ -1,12 +1,13 @@
 import React, { createContext, Component } from 'react';
 import {api} from './config';
+import slug from 'slug';
 
 export function parseSong(song) {
   return {
     id: song.id,
     title: song.title,
     streamUrl: `${api}/stream/${song.id}`,
-    downloadUrl: `${api}/dl/${song.id}?title=${encodeURIComponent(song.title)}`,
+    downloadUrl: `${api}/dl/${song.id}?title=${slug(song.title, '_')}`,
     imageUrl: song.thumbnails.medium.url
   }
 }
