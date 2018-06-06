@@ -16,7 +16,7 @@ const Context = createContext({
   queue: [],
   songs: {},
   autoplay: false,
-  currentSongIndex: null,
+  currentSongId: null,
   set: () => {}
 })
 
@@ -26,7 +26,7 @@ export class ContextProvider extends Component {
     songs: {},
     queue: [],
     autoplay: false,
-    currentSongIndex: null,
+    currentSongId: null,
     set: (...args) => {
       this.setState(...args);
     },

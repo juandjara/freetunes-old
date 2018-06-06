@@ -141,13 +141,20 @@ class Player extends Component {
     }))
   }
 
+  playNext() {
+
+  }
+
+  playPrev() {
+  }
+
   render() {
-    const {songs, currentSongIndex} = this.props.context;
+    const {songs, currentSongId} = this.props.context;
     const {loading, paused, sound} = this.state;
     const icon = !sound || paused ? 'play_arrow' : 'pause'
     const startTime = this.formatTime(sound && sound.position);
     const endTime = this.formatTime(sound && sound.duration);
-    const song = songs[currentSongIndex] || {};
+    const song = songs[currentSongId] || {};
     const playStatus = this.state.paused ? 
       Sound.status.PAUSED : Sound.status.PLAYING;
 

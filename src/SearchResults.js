@@ -111,7 +111,7 @@ class SearchResults extends Component {
               <img src={result.imageUrl} alt="thumbnail" />
               <div className="controls">
                 <PlayLink
-                  playing={result.id === this.props.context.currentSongIndex}
+                  playing={result.id === this.props.context.currentSongId}
                   to={`/song/${result.id}`} 
                   title="Reproducir">
                   <i className="material-icons">play_arrow</i>

@@ -46,7 +46,7 @@ class Song extends Component {
       })
     }
 
-    this.props.context.set({currentSongIndex: id});
+    this.props.context.set({currentSongId: id});
   }
   render() {
     const id = this.props.match.params.id;
