@@ -5,7 +5,7 @@ import {api} from './config';
 
 const SongStyle = styled.div`
   img {
-    margin: 1em auto;
+    margin: 8px auto 1em auto;
     display: block;
     max-width: 100%;
     box-sizing: border-box;
@@ -18,7 +18,7 @@ const Button = styled.button`
   background: none;
   color: #666;
   border-radius: 4px;
-  margin: 0 auto;
+  padding: 0;
   display: block;
   cursor: pointer;
   border: none;
@@ -59,8 +59,8 @@ class Song extends Component {
     return (
       <SongStyle>
         <Button onClick={() => { this.props.history.goBack() }}>
-          <i className="material-icons">close</i>
-          Volver a la lista
+          <i className="material-icons">keyboard_arrow_down</i>
+          Minimizar
         </Button>
         <img src={song.imageUrl} alt=""/>
         <p>{song.title}</p>
