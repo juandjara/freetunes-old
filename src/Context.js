@@ -40,14 +40,6 @@ export class ContextProvider extends Component {
         queue: order,
         songs: {...state.songs, ...entities}
       }));
-    },
-    cacheSong: (song) => {
-      this.setState(state => ({
-        songs: {
-          ...state.songs,
-          [song.id]: song
-        }
-      }))
     }
   }
   render() { 
