@@ -33,19 +33,19 @@ export class ContextProvider extends Component {
     setQueue: (queue) => {
       const order = queue.map(s => s.id);
       const entities = queue.reduce((prev, next) =>{
-        prev[next.id] = parseSong(next);
+        prev[next.id] = next;
         return prev;
       }, {})
       this.setState(state => ({
         queue: order,
-        songs: {...state.songs, entities}
+        songs: {...state.songs, ...entities}
       }));
     },
     cacheSong: (song) => {
       this.setState(state => ({
         songs: {
           ...state.songs,
-          [song.id]: parseSong(song)
+          [song.id]: song
         }
       }))
     }

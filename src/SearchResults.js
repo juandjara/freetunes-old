@@ -85,7 +85,7 @@ class SearchResults extends Component {
       const prevResults = nextPageToken ? this.state.results : [];
       const newResults = data.results.map(parseSong);
       const results = prevResults.concat(newResults);
-      this.props.context.set({queue: results});
+      this.props.context.setQueue(results);
       this.setState({
         results,
         loading: false,

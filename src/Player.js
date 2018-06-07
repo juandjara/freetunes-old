@@ -142,10 +142,31 @@ class Player extends Component {
   }
 
   playNext() {
-
+    const {songs, currentSongId, queue} = this.props.context;
+    const songIndex = queue.indexOf(currentSongId);
+    let nextIndex = songIndex + 1;
+    if (nextIndex >= queue.lenght) {
+      nextIndex = 0;
+    }
+    const song = songs[queue[nextIndex]];
+    if (!song) {
+      return;
+    }
+    this.props.context.set({currentSongId: song.id});
   }
 
   playPrev() {
+    const {songs, currentSongId, queue} = this.props.context;
+    const songIndex = queue.indexOf(currentSongId);
+    let prevIndex = songIndex - 1;
+    if (prevIndex < 0) {
+      prevIndex = queue.lenght - 1;
+    }
+    const song = songs[queue[prevIndex]];
+    if (!song) {
+      return;
+    }
+    this.props.context.set({currentSongId: song.id});
   }
 
   render() {
@@ -168,7 +189,7 @@ class Player extends Component {
           onPlaying={sound => this.onPlaying(sound)}
           onFinishedPlayed={() => this.onFinished()} />
         <PlayControl>
-          <Button>
+          <Button onClick={() => this.playPrev()}>
             <i className="material-icons">fast_rewind</i>
           </Button>
           <Button 
@@ -177,7 +198,7 @@ class Player extends Component {
             onClick={() => this.togglePlayPause()}>
             <i className="material-icons">{icon}</i>
           </Button>
-          <Button>
+          <Button onClick={() => this.playNext()}>
             <i className="material-icons">fast_forward</i>
           </Button>
         </PlayControl>
