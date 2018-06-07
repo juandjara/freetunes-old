@@ -30,6 +30,11 @@ function thumb() {
     width: var(--thumb-d); height: var(--thumb-d);
     border-radius: 50%;
     background: white;
+    transition: 0.2s ease-in-out;
+    &:hover {
+      width: 20px;
+      height: 20px;
+    }
   `;
 }
 
@@ -59,6 +64,11 @@ const SliderStyle = styled.input`
     height: var(--thumb-d);
     background: transparent;
     font: 1em/1 arial, sans-serif;
+    cursor: pointer;
+
+    &::-moz-focus-outer {
+      border: none;
+    }
     
     &::-webkit-slider-runnable-track {
       ${track(1)}
