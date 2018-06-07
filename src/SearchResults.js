@@ -1,55 +1,11 @@
 import React, { Component, Fragment } from 'react';
 import qs from 'qs';
-import styled from 'styled-components';
 import { withContext, parseSong } from './Context';
 import { api } from './config';
 import AutoplayToggle from './AutoplayToggle';
+import ListStyle from './ListStyle';
+import Button from './Button';
 
-const ListStyle = styled.ul`
-  opacity: ${props => props.loading ? 0.5 : 1};
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  li {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: flex-start;
-    align-items: center;
-    padding: 2em 0 1em 0;
-    img {
-      width: 200px;
-    }
-    .controls {
-      margin: 12px;
-    }
-    p {
-      margin: 6px 0;
-      text-align: center;
-    }
-    @media (max-width: 600px) {
-      flex-direction: column;
-    }
-  }
-`;
-const Button = styled.button`
-  background: ${props => props.playing ? '#f7f7f7' : 'white'};
-  color: var(--color-accent);
-  border-radius: 4px;
-  padding: 8px;
-  border: none;
-  font-size: 16px;
-  cursor: pointer;
-  display: inline-block;
-  margin: 0 6px;
-  ${props => props.centered ? `
-    margin: 20px auto;
-    padding: 8px 12px;
-    display: block;
-  ` : ''}
-  &:hover {
-    background: #f7f7f7;
-  }
-`;
 const DownloadLink = Button.withComponent('a');
 
 class SearchResults extends Component {
@@ -97,6 +53,10 @@ class SearchResults extends Component {
     this.props.context.set({currentSongId: song.id});
   }
 
+  addToPlaylist(song) {
+    this.props.context.addPlaylistSong(song.id);
+  }
+
   render() {
     const {query, loading, results, nextPageToken} = this.state;
     if (results.length === 0 && !loading) {
@@ -120,7 +80,7 @@ class SearchResults extends Component {
                   title="Reproducir">
                   <i className="material-icons">play_arrow</i>
                 </Button>
-                <Button title="Añadir a la playlist">
+                <Button  onClick={() => this.addToPlaylist(result)} title="Añadir a la lista de reproduccion personal">
                   <i className="material-icons">playlist_add</i>
                 </Button>
                 <DownloadLink

@@ -15,8 +15,9 @@ export function parseSong(song) {
 const savedState = JSON.parse(localStorage.getItem('freetunes_context')) || {};
 
 const Context = createContext({
-  queue: [],
   songs: {},
+  queue: [],
+  userPlaylist: [],
   autoplay: false,
   currentSongId: null,
   ...savedState,
@@ -61,7 +62,7 @@ export class ContextProvider extends Component {
         userPlaylist: [...state.userPlaylist, id]
       }))
     },
-    deletePlaylistSong: (id) => {
+    removePlaylistSong: (id) => {
       this.state.set(state =>({
         userPlaylist: state.userPlaylist.filter(_id => _id !== id)
       }));

@@ -94,7 +94,6 @@ class Nav extends Component {
 
   debounceKeyup = debounce((query) => {
     this.fetchAutoSuggest(query).then(results => {
-      console.log('results: ', results);
       this.setState({searchResults: results, loading: false})
     });
   }, 300);
