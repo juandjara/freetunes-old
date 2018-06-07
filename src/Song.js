@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import { withContext } from './Context';
+import { withContext, parseSong } from './Context';
 import styled from 'styled-components';
 import {api} from './config';
 
@@ -42,7 +42,7 @@ class Song extends Component {
       fetch(`${api}/song/${id}`)
       .then(res => res.json())
       .then(json => {
-        this.props.context.cacheSong(json);
+        this.props.context.cacheSong(parseSong(json));
       })
     }
 
