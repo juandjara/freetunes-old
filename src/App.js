@@ -6,7 +6,6 @@ import Playlist from './Playlist';
 import SearchResults from './SearchResults';
 import { ContextProvider } from './Context';
 import Player from './Player';
-import Song from './Song';
 
 class App extends Component {
   render() {
@@ -19,7 +18,6 @@ class App extends Component {
             <div className="wrapper">
               <Route exact path="/" component={Playlist} />
               <Route path="/search" component={SearchResults} />
-              <Route path="/song/:id" component={Song} />
             </div>
             <Player></Player>
           </Fragment>

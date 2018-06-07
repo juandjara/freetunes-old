@@ -85,6 +85,15 @@ class Player extends Component {
   componentDidMount () {
     soundManager.setup({debugMode: false});
   }
+
+  componentWillReceiveProps(nextProps) {
+    const oldSong = this.props.context.currentSongId;
+    const newSong = nextProps.context.currentSongId;
+    if (oldSong !== newSong) {
+      this.slideTo(0);
+    }
+  }
+
   togglePlayPause() {
     this.setState(state => ({paused: !state.paused}))
   }
@@ -126,14 +135,20 @@ class Player extends Component {
   onFinished() {
     this.setState({
       sound: null
-    })
+    });
+    if (this.props.context.autoplay) {
+      this.playNext();
+    } else {
+      this.props.context.set({currentSongId: null});
+    }
   }
 
-  onSlide(value) {
+  slideTo(value) {
     if (!this.state.sound) {
       return;
     }
     this.setState(state => ({
+      loading: true,
       sound: {
         ...state.sound, 
         position: value * state.sound.duration
@@ -152,6 +167,7 @@ class Player extends Component {
     if (!song) {
       return;
     }
+    this.slideTo(0);
     this.props.context.set({currentSongId: song.id});
   }
 
@@ -166,6 +182,7 @@ class Player extends Component {
     if (!song) {
       return;
     }
+    this.slideTo(0);    
     this.props.context.set({currentSongId: song.id});
   }
 
@@ -187,7 +204,7 @@ class Player extends Component {
           position={sound ? sound.position : 0}
           onLoading={() => this.setState({loading: true})}
           onPlaying={sound => this.onPlaying(sound)}
-          onFinishedPlayed={() => this.onFinished()} />
+          onFinishedPlaying={() => this.onFinished()} />
         <PlayControl>
           <Button onClick={() => this.playPrev()}>
             <i className="material-icons">fast_rewind</i>
@@ -205,7 +222,7 @@ class Player extends Component {
         <TimeControl>
           <p>{startTime}</p>
           <Slider
-            onChange={ev => this.onSlide(ev.target.value)}
+            onChange={ev => this.slideTo(ev.target.value)}
             value={this.getPercentPlayed()}
             innerRef={node => {this.slideNode = node}}
             min={0}

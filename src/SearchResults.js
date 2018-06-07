@@ -2,8 +2,8 @@ import React, { Component, Fragment } from 'react';
 import qs from 'qs';
 import styled from 'styled-components';
 import { withContext, parseSong } from './Context';
-import { Link } from 'react-router-dom';
 import { api } from './config';
+import AutoplayToggle from './AutoplayToggle';
 
 const ListStyle = styled.ul`
   opacity: ${props => props.loading ? 0.5 : 1};
@@ -50,7 +50,6 @@ const Button = styled.button`
     background: #f7f7f7;
   }
 `;
-const PlayLink = Button.withComponent(Link);
 const DownloadLink = Button.withComponent('a');
 
 class SearchResults extends Component {
@@ -94,6 +93,10 @@ class SearchResults extends Component {
     })
   }
 
+  playSong(song) {
+    this.props.context.set({currentSongId: song.id});
+  }
+
   render() {
     const {query, loading, results, nextPageToken} = this.state;
     if (results.length === 0 && !loading) {
@@ -105,17 +108,18 @@ class SearchResults extends Component {
     }
     return (
       <Fragment>
+        <AutoplayToggle />
         <ListStyle loading={this.state.loading}>
           {results.map(result => (
             <li key={result.id}>
               <img src={result.imageUrl} alt="thumbnail" />
               <div className="controls">
-                <PlayLink
+                <Button
                   playing={result.id === this.props.context.currentSongId}
-                  to={`/song/${result.id}`} 
+                  onClick={() => this.playSong(result)}
                   title="Reproducir">
                   <i className="material-icons">play_arrow</i>
-                </PlayLink>
+                </Button>
                 <Button title="Añadir a la playlist">
                   <i className="material-icons">playlist_add</i>
                 </Button>
