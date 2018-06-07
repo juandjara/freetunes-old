@@ -12,11 +12,14 @@ export function parseSong(song) {
   }
 }
 
+const savedState = JSON.parse(localStorage.getItem('freetunes_context')) || {};
+
 const Context = createContext({
   queue: [],
   songs: {},
   autoplay: false,
   currentSongId: null,
+  ...savedState,
   set: () => {}
 })
 
@@ -25,10 +28,22 @@ export class ContextProvider extends Component {
   state = {
     songs: {},
     queue: [],
+    userPlaylist: [],
     autoplay: false,
     currentSongId: null,
-    set: (...args) => {
-      this.setState(...args);
+    ...savedState,
+    set: (modifier) => {
+      this.setState(modifier, () => {
+        localStorage.setItem(
+          'freetunes_context',
+          JSON.stringify({
+            autoplay: this.state.autoplay,
+            userPlaylist: this.state.userPlaylist,
+            songs: this.state.songs
+          })
+        );
+        // unos 5MB de almacenamiento darian para unas 7000 canciones cacheadas
+      });
     },
     setQueue: (queue) => {
       const order = queue.map(s => s.id);
@@ -36,9 +51,19 @@ export class ContextProvider extends Component {
         prev[next.id] = next;
         return prev;
       }, {})
-      this.setState(state => ({
+      this.state.set(state => ({
         queue: order,
         songs: {...state.songs, ...entities}
+      }));
+    },
+    addPlaylistSong: (id) => {
+      this.state.set(state => ({
+        userPlaylist: [...state.userPlaylist, id]
+      }))
+    },
+    deletePlaylistSong: (id) => {
+      this.state.set(state =>({
+        userPlaylist: state.userPlaylist.filter(_id => _id !== id)
       }));
     }
   }
