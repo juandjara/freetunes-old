@@ -210,6 +210,7 @@ class Player extends Component {
           position={sound ? sound.position : 0}
           onLoading={() => this.setState({loading: true})}
           onPlaying={sound => this.onPlaying(sound)}
+          onPause={() => this.togglePlayPause()}
           onFinishedPlaying={() => this.onFinished()} />
         <PlayControl>
           <Button onClick={() => this.playPrev()}>
