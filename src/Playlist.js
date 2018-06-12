@@ -16,6 +16,11 @@ const EmptyStyle = styled.div`
 const DownloadLink = Button.withComponent('a');
 
 class Playlist extends Component {
+
+  componentDidMount() {
+    this.props.context.set({queue: this.props.context.userPlaylist})
+  }
+
   removeSong(song) {
     this.props.context.removePlaylistSong(song.id);
   }
