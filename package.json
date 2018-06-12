@@ -18,6 +18,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "copy": "cp build/index.html build/200.html",
+    "deploy": "npm run copy && surge build freetunes.fuken.xyz"
   }
 }
