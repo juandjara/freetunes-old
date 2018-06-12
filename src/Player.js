@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import { withContext } from './Context';
 import Sound from 'react-sound';
 import Slider from './Slider';
+import {Helmet} from "react-helmet";
 
 const PlayerStyle = styled.div`
   position: fixed;
@@ -198,6 +199,11 @@ class Player extends Component {
 
     return (
       <PlayerStyle>
+        {sound && song && (
+          <Helmet>
+            <title>{song.title}</title>
+          </Helmet>
+        )}
         <Sound 
           url={song.streamUrl || ""}
           playStatus={playStatus}
