@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import styled from 'styled-components';
 import { NavLink, withRouter } from 'react-router-dom';
 import debounce from 'lodash.debounce';
-import jsonp from 'jsonp';
+import axios from 'axios'
 
 const NavStyle = styled.nav`
   max-width: 900px;
@@ -69,10 +69,11 @@ const ResultsStyle = styled.ul`
   overflow-y: auto;
   border-radius: 4px;
   max-width: 290px;
+  z-index: 2;
   li {
     padding: 6px 12px;
     font-size: 14px;
-    oveflow: hidden;
+    overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
     &:hover {
@@ -83,7 +84,7 @@ const ResultsStyle = styled.ul`
 
 const enterKeycode = 13;
 
-const googleAutoSuggestURL = '//suggestqueries.google.com/complete/search?client=youtube&ds=yt&q=';
+const autocompleteURL = 'https://ftunes-api.fuken.xyz/autocomplete?q=';
 
 class Nav extends Component {
   state = {
@@ -93,7 +94,7 @@ class Nav extends Component {
   }
 
   debounceKeyup = debounce((query) => {
-    this.fetchAutoSuggest(query).then(results => {
+    this.fetchAutoComplete(query).then(results => {
       this.setState({searchResults: results, loading: false})
     });
   }, 300);
@@ -106,20 +107,20 @@ class Nav extends Component {
     this.debounceKeyup(query);
   }
 
-  fetchAutoSuggest(query) {
-    const url = googleAutoSuggestURL + query;
+  fetchAutoComplete(query) {
+    const url = autocompleteURL + query;
     if(!query) {
       return Promise.resolve([]);
     }
-    return new Promise((resolve, reject) => {
-      jsonp(url, (err, data) => {
-        if (err) {
-          reject(err);
-          return;
-        }
-        const results = data[1].map(item => item[0]);
-        resolve(results);
-      })
+    return axios({
+      url,
+      method: 'GET',
+      responseType: 'text'
+    }).then(res => {
+      const cleantext = String(res.data).replace(/^.+\(/, '')
+        .replace(')', '')
+      const data = JSON.parse(cleantext)
+      return data[1].map(item => item[0]);
     })
   }
 
