@@ -21,5 +21,8 @@
     "eject": "react-scripts eject",
     "copy": "cp build/index.html build/200.html",
     "deploy": "npm run copy && surge build freetunes.fuken.xyz"
+  },
+  "devDependencies": {
+    "surge": "^0.21.3"
   }
 }
