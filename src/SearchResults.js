@@ -5,6 +5,7 @@ import { api } from './config';
 import AutoplayToggle from './AutoplayToggle';
 import ListStyle from './ListStyle';
 import Button from './Button';
+import {Helmet} from "react-helmet";
 
 const DownloadLink = Button.withComponent('a');
 
@@ -71,6 +72,11 @@ class SearchResults extends Component {
     }
     return (
       <Fragment>
+        {this.props.context.currentSongId ? null : (
+          <Helmet>
+            <title>Freetunes | 🔍 {query}</title>
+          </Helmet>
+        )}
         <AutoplayToggle />
         <ListStyle loading={this.state.loading}>
           {results.map(result => (
@@ -83,7 +89,7 @@ class SearchResults extends Component {
                   title="Reproducir">
                   <i className="material-icons">play_arrow</i>
                 </Button>
-                <Button  onClick={() => this.addToPlaylist(result)} title="Añadir a la lista de reproduccion personal">
+                <Button onClick={() => this.addToPlaylist(result)} title="Añadir a la lista de reproduccion personal">
                   <i className="material-icons">playlist_add</i>
                 </Button>
                 <DownloadLink

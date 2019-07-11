@@ -7,19 +7,22 @@ const ListStyle = styled.ul`
   padding: 0;
   li {
     display: flex;
-    flex-wrap: wrap;
     justify-content: flex-start;
     align-items: center;
     padding: 2em 0 1em 0;
     img {
-      width: 200px;
+      width: 280px;
+      border-radius: 4px;
+      flex-shrink: 0;
     }
     .controls {
       margin: 12px;
+      flex-shrink: 0;
     }
     p {
       margin: 6px 0;
       text-align: center;
+      flex-shrink: 1;
     }
     @media (max-width: 600px) {
       flex-direction: column;

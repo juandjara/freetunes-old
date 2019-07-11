@@ -111,8 +111,7 @@ class Player extends Component {
   onPlaying(sound) {
     this.setState({
       sound,
-      loading: false,
-      paused: false
+      loading: false
     });
   }
 
@@ -201,7 +200,7 @@ class Player extends Component {
       <PlayerStyle>
         {sound && song && (
           <Helmet>
-            <title>{song.title}</title>
+            <title>Freetunes | ▶️ {song.title}</title>
           </Helmet>
         )}
         <Sound 
@@ -210,7 +209,6 @@ class Player extends Component {
           position={sound ? sound.position : 0}
           onLoading={() => this.setState({loading: true})}
           onPlaying={sound => this.onPlaying(sound)}
-          onPause={() => this.togglePlayPause()}
           onFinishedPlaying={() => this.onFinished()} />
         <PlayControl>
           <Button onClick={() => this.playPrev()}>
