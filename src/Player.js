@@ -12,7 +12,6 @@ const PlayerStyle = styled.div`
   left: 0;
   width: 100%;
   background: var(--color-accent);
-  padding: 8px 0;
 `;
 const Button = styled.button`
   color: white;
@@ -25,6 +24,9 @@ const Button = styled.button`
   cursor: pointer;
   transition: opacity 0.5s;
   margin: 0 6px;
+  & + button {
+    margin-left: 0;
+  }
   &.playpause {
     background: white;
     color: var(--color-accent);
@@ -58,20 +60,24 @@ const Button = styled.button`
 `;
 const PlayControl = styled.div`
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
+  margin: 8px 0 8px 12px;
+  color: white;
+  p {
+    margin: 0;
+  }
 `;
 const TimeControl = styled.div`
-  margin: 0 auto;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  transform: translateY(-50%);
   display: flex;
   justify-content: center;
   align-items: center;
-  max-width: 768px;
   color: white;
-  p {
-    margin: 4px 8px;
-    letter-spacing: 1px;
-  }
   input {
     flex: 1 1 auto;
   }
@@ -92,6 +98,7 @@ class Player extends Component {
     const newSong = nextProps.context.currentSongId;
     if (oldSong !== newSong) {
       this.slideTo(0);
+      // TODO: check this https://developers.google.com/web/updates/2017/02/media-session
     }
   }
 
@@ -200,7 +207,7 @@ class Player extends Component {
       <PlayerStyle>
         {sound && song && (
           <Helmet>
-            <title>Freetunes | ▶️ {song.title}</title>
+            <title>▶️ {song.title} | Freetunes</title>
           </Helmet>
         )}
         <Sound 
@@ -210,22 +217,7 @@ class Player extends Component {
           onLoading={() => this.setState({loading: true})}
           onPlaying={sound => this.onPlaying(sound)}
           onFinishedPlaying={() => this.onFinished()} />
-        <PlayControl>
-          <Button onClick={() => this.playPrev()}>
-            <i className="material-icons">fast_rewind</i>
-          </Button>
-          <Button 
-            loading={loading} 
-            className="playpause" 
-            onClick={() => this.togglePlayPause()}>
-            <i className="material-icons">{icon}</i>
-          </Button>
-          <Button onClick={() => this.playNext()}>
-            <i className="material-icons">fast_forward</i>
-          </Button>
-        </PlayControl>
         <TimeControl>
-          <p>{startTime}</p>
           <Slider
             onChange={ev => this.slideTo(ev.target.value)}
             value={this.getPercentPlayed()}
@@ -233,8 +225,24 @@ class Player extends Component {
             min={0}
             max={1}
             step={0.01} />
-          <p>{endTime}</p>          
         </TimeControl>
+        <PlayControl>
+          <p> {startTime} / {endTime} </p>
+          <div>
+            <Button onClick={() => this.playPrev()}>
+              <i className="material-icons">fast_rewind</i>
+            </Button>
+            <Button 
+              loading={loading} 
+              className="playpause" 
+              onClick={() => this.togglePlayPause()}>
+              <i className="material-icons">{icon}</i>
+            </Button>
+            <Button onClick={() => this.playNext()}>
+              <i className="material-icons">fast_forward</i>
+            </Button>
+          </div>
+        </PlayControl>
       </PlayerStyle>
     );
   }

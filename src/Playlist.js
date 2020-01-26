@@ -11,6 +11,9 @@ const EmptyStyle = styled.div`
     font-size: 36px;
     color: #888;
   }
+  p {
+    line-height: 1.8;
+  }
 `;
 
 const DownloadLink = Button.withComponent('a');

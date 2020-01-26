@@ -17,7 +17,7 @@ const HeaderStyle = styled.header`
     font-size: 32px;
   }
   h1 {
-    margin: .5rem 0;
+    margin: 12px 0;
     font-size: 2em;
     font-weight: 500;
     color: #333;
@@ -36,7 +36,7 @@ const Header = () => {
       <Link to="/">
         <i className="material-icons">music_note</i>
         <h1>Freetunes</h1>
-        <h2>Mashup de m&uacute;sica</h2>
+        <h2>Tu m&uacute;sica de fondo</h2>
       </Link>
     </HeaderStyle>
   )

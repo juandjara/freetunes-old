@@ -74,7 +74,7 @@ class SearchResults extends Component {
       <Fragment>
         {this.props.context.currentSongId ? null : (
           <Helmet>
-            <title>Freetunes | 🔍 {query}</title>
+            <title>🔍 Freetunes | {query}</title>
           </Helmet>
         )}
         <AutoplayToggle />

@@ -6,16 +6,20 @@ import axios from 'axios'
 
 const NavStyle = styled.nav`
   max-width: 900px;
-  margin: 20px auto;
+  margin: 0 auto;
+  margin-top: 42px;
+  margin-bottom: 24px;
   display: flex;
   align-items: flex-end;
   justify-content: space-between;
   border-bottom: 1px solid #ccc;
   position: relative;
+  padding: 0;
   a {
     color: #666;
     padding: 6px 8px;
     border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
     .material-icons {
       margin-right: 4px;
     }
@@ -29,11 +33,11 @@ const NavStyle = styled.nav`
 `;
 
 const SearchStyle = styled.div`
-  font-size: 16px;
+  font-size: 20px;
   position: relative;
   .material-icons {
     position: absolute;
-    left: 8px;
+    right: 12px;
     top: 50%;
     transform: translateY(-50%);
     font-size: inherit;
@@ -42,15 +46,18 @@ const SearchStyle = styled.div`
     margin: 4px;
     background: white;
     border: 1px solid white;
-    padding: 6px 8px;
     border-radius: 4px;
-    padding-left: 22px;
-    font-size: 12px;
-    width: 120px;
-    transition: all 0.3s;
+    padding: 6px 8px;
+    padding-right: 32px;
+    font-size: 14px;
+    line-height: 24px;
+    width: 200px;
+    max-width: calc(100vw - 150px);
+    will-change: width;
+    transition: width 0.3s, border-color 0.3s;
     outline: none;
     &:focus {
-      width: 160px;
+      width: 275px;
       border-color: var(--color-accent);
     }
   }
