@@ -8,11 +8,12 @@ import Button from './Button';
 const EmptyStyle = styled.div`
   text-align: center;
   .material-icons {
-    font-size: 36px;
+    font-size: 48px;
     color: #888;
   }
   p {
     line-height: 1.8;
+    color: #444;
   }
 `;
 
