@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { NavLink, withRouter } from 'react-router-dom';
 import debounce from 'lodash.debounce';
 import axios from 'axios'
+import { api } from './config'
 
 const NavStyle = styled.nav`
   max-width: 900px;
@@ -90,8 +91,7 @@ const ResultsStyle = styled.ul`
 `;
 
 const enterKeycode = 13;
-
-const autocompleteURL = 'https://ftunes-api.fuken.xyz/autocomplete?q=';
+const autocompleteURL = api + '/autocomplete?q=';
 
 class Nav extends Component {
   state = {
