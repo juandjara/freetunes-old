@@ -35,20 +35,26 @@ class SearchResults extends Component {
   }
   fetchSearchResults(query, nextPageToken = '') {
     this.setState({query, loading: true});
-    fetch(`${api}/search?q=${query}&nextPageToken=${nextPageToken}`)
+    fetch(`https://invidious.epicsite.xyz/api/v1/search?q=${query}`)
     .then(res => res.json())
     .then(data => {
-      const prevResults = nextPageToken ? this.state.results : [];
-      const newResults = data.results.map(parseSong);
-      const results = prevResults.concat(newResults).map(el => {
-        el.title = el.title.replace(/&quot;/g, '"')
-        return el
-      })
+      const results = data.map((d) => ({
+        id: d.videoId,
+        title: d.title,
+        description: d.description,
+        imageUrl: `https://i.ytimg.com/vi/${d.videoId}/mqdefault.jpg`,
+        downloadUrl: `https://fta.djara.dev/dl/${d.videoId}`
+      }))
+      // const prevResults = nextPageToken ? this.state.results : [];
+      // const newResults = data.results.map(parseSong);
+      // const results = prevResults.concat(newResults).map(el => {
+      //   el.title = el.title.replace(/&quot;/g, '"')
+      //   return el
+      // })
       this.props.context.setQueue(results);
       this.setState({
         results,
         loading: false,
-        nextPageToken: data.nextPageToken
       });
     })
   }
@@ -62,7 +68,7 @@ class SearchResults extends Component {
   }
 
   render() {
-    const {query, loading, results, nextPageToken} = this.state;
+    const {query, loading, results} = this.state;
     if (results.length === 0 && !loading) {
       return (
         <p style={{textAlign: 'center', marginTop: '2em'}}>
@@ -103,11 +109,11 @@ class SearchResults extends Component {
             </li>
           ))}
         </ListStyle>
-        {nextPageToken && (
+        {/* {nextPageToken && (
           <Button centered onClick={() => { this.fetchSearchResults(query, nextPageToken) }}>
             Cargar más
           </Button>
-        )}
+        )} */}
       </Fragment>
     )
   }
