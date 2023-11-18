@@ -1,3 +1,6 @@
+
+Hay una version nueva de este proyecto: https://github.com/juandjara/freetunes
+
 # Freetunes react
 
 Este sitio esta desplegado en https://freetunes.fuken.xyz y creado usando create-react-app y la api de contextos de React 16.
